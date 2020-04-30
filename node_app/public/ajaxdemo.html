@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    var xhr = new XMLHttpRequest();
+    // xhr.open('get','http://localhost:3000/first');
+    xhr.open('get', 'http://localhost:3000/responseData');
+    xhr.send();
+    xhr.onload = function () {
+        // console.log(xhr.xhr.responseText)
+        // console.log(xhr.xhr.first)
+        // console.log(typeof xhr.responseText)
+
+        var responseText = JSON.parse(xhr.responseText);
+        console.log(responseText);
+        var str = '<h2>' + responseText.name + '</h2>';
+        var str01 = '<h2>' + responseText.__proto__ + '</h2>';
+        var str02 = '<h2>' + responseText.object + '</h2>';
+        document.body.innerHTML = str + str01 + str02;
+
+
+    }
+
+</script>
+</body>
+</html>

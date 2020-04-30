@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.min.js"></script>
+</head>
+<body>
+<Child>
+
+    <span slot="header">hello world</span>
+
+    <span slot="main">hello world</span>
+
+    <span slot="footer">hello world</span>
+
+    <span slot="other">{{otherData}}</span>
+
+</Child>
+
+<template>
+
+    <div>
+
+        <slot  name=”header”>这是拥有命名的slot的默认内容</slot>
+
+        <slot  name=”main”>这是拥有命名的slot的默认内容</slot>
+
+        <slot  name=”footer”>这是拥有命名的slot的默认内容</slot>
+
+        <slot  name=”other”>这是拥有命名的slot的默认内容</slot>
+
+    </div>
+
+</template>
+
+   
+<ul>
+
+          
+    <slot name="item" v-for="item in items" :text="item.text" :myname="item.myname">
+
+                 slot的默认内容
+
+              
+    </slot>
+
+       
+</ul>
+
+
+   
+<Child>
+
+          
+    <template slot="item" scope="props">
+
+                
+        <li>{{props.myname}}</li>
+
+              
+    </template>
+
+       
+</Child>
+
+
+<template>
+    <div>
+        我是父组件
+        <slotOne1>
+            <p style="color:red">我是父组件插槽内容</p>
+        </slotOne1>
+    </div>
+</template>
+
+<template>
+    <div class="slotOne1">
+        <div>我是slotOne1组件</div>
+        <slot></slot>
+    </div>
+</template>
+<script>
+    new Vue({
+        el: '#app',
+        components: {
+            child: {
+                template: "<div><slot></slot>我是子组件</div>"
+            }
+        }
+    });
+
+    Vue.component('biaoqian', {props: ['canshu'], template: 'moban'})
+</script>
+
+
+<div id="app">
+    　　　　
+    <child>
+        　　　　　　<span>123456</span>
+        　　　　
+    </child>
+    　　
+</div>
+　　
+<script>
+    new Vue({
+        el: '#app',
+        components: {
+            child: {
+                template: "<div>我是子组件</div>"
+            }
+        }
+    });
+</script>
+<!--浏览器打开：<span>123456</span>内容不会显示，界面只显示：我是子组件-->
+
+<!--注：虽然<span>标签被子组件的child标签所包含，但由于他不在子组件的template属性中，因此不属于子组件-->
+
+<!--总结：slot分发其实就是父组件需要在子组件内放一些DOM，它就是负责这些DOM是否显示，在哪个地方显示的。-->
+
+</body>
+</html>

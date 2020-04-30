@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!--<script src="../js/vue.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.min.js"></script>
+</head>
+<body>
+
+<div class="app">
+    <!-- 引用组件的名称 -->
+    <login></login>
+    <login2></login2>
+    <login3></login3>
+    <hr>
+    <login6></login6>
+    <biaoqian v-for="sit in list" v-bind:canshu="sit"></biaoqian>
+</div>
+
+
+<!-- 注意 这里的id是必须的，不要在实例控制中的divcalss app 中去写template -->
+<template id="login3">
+    <div>
+        <h2>我是第三种方式创建出来的{{canshu}}</h2>
+    </div>
+</template>
+<template id="login6">
+    <div>
+        <h2>我是第六种方式创建出来的</h2>
+    </div>
+</template>
+<template id="moban">
+    <div>
+        <li>{{canshu}}</li>
+    </div>
+</template>
+
+<!-- Vue实例 -->
+<script>
+    // Component 组件的创建
+    // 注意  template 中的容器 只能有一个父元素，不能包含两个 你可以用一个div包裹
+    // 第一种创建全局组件
+    // extend是注册组件函数，他返回一个对象
+    var comobj = Vue.extend({
+        template: "<h1>我是全局组件</h1>"
+    })
+    // component函数提交组件，第一个参数为组件的名称，第二个参数是一个注册组件的对象
+    Vue.component("login", comobj)
+
+
+    // 第二种创建方式
+    // component 中直接写上一个模板对象
+    Vue.component('login2', {template: '<h1>我是第二种v创建出来的组件</h1>'});
+
+
+    // 第三种创建的方式 首先在元素中创建一个template模板
+    Vue.component('login3', {props: ['canshu'], template: '#login3'})
+
+    //组件遍历参数
+    Vue.component('biaoqian', {props: ['canshu'], template: 'moban'})
+
+    var vm = new Vue({
+        el: '.app',
+        data: {
+            list: ["我", "n", "m"]
+        },
+        // 定义私有组件 和全局差不多 组件名称和对象，也可以使用template模板来创建
+        components: {
+            login6: {template: '#login6'},
+            moban: {template: 'moban'},
+        }
+    })
+
+</script>
+</body>
+</html>

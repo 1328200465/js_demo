@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script type="text/javascript">
+    //行参options
+    function ajax(options) {
+        var xhr = new XMLHttpRequest();
+        var params = '';
+        //options.data为对象类型
+        for (var attr in options.data) {
+            params += attr + '=' + options.data[attr] + '&';
+        }
+        //去除最后一位：  &
+        params = params.substr(0, params.length - 1);
+        console.log(params);
+
+//自己写的没有空格，报错
+//         if(oprions.type=='get'){
+//             options.url=options.url+'?'+params
+//         }
+
+        if (options.type == 'get') {
+            options.url = options.url + '?' + params
+        }
+
+        xhr.open(options.type, options.url);
+
+        if (options.type == 'post') {
+            //向服务器端请求参数的类型
+            var contentType = options.header['Content-Type']
+            xhr.setRequestHeader('Content-Type', contentType)
+            if (contentType == 'application/json') {
+                xhr.send(JSON.stringify(options.data))
+            } else {
+                xhr.send(params);
+            }
+
+        } else {
+            xhr.send();
+        }
+
+        xhr.onload = function () {
+            var contenttype = xhr.getResponseHeader('Content-Type');
+            var responsetext = xhr.responseText;
+            if (contenttype.includes('application/json')) {
+                console.log('包含json');
+                //转换成json格式，并重新赋值
+                responsetext = JSON.parse(responsetext);
+            }
+            console.log(contenttype + '...1...服务器返回的Content-Type格式类型');
+            if (xhr.status == 200) {
+                options.success(responsetext, xhr + '....2......因为有外部干扰xhr，所以只显示一个xhr表头[object XMLHttpRequest]');
+                options.success(xhr);
+            } else {
+                options.error(responsetext, xhr);
+            }
+            console.log(xhr);
+            console.log(xhr.responseText + '.....3....http.status状态码等于200时返回的数据');
+            options.success(xhr.responseText + '....4...http.status状态码等于200时返回的数据');
+            options.error(xhr.responseText + '.....5.....http.status状态码等于400时返回的数据');
+        }
+    }
+
+    //实参ajax
+    ajax({
+        type: 'get',
+        url: 'http://localhost:3000/responseData',
+        data: {
+            name: 'zs',
+            age: 20
+        },
+        header: {
+            // 'Content-type':'application/x-www-form-urlencoded'
+            'Content-Type': 'application/json',
+        },
+
+        success: function (data, String) {
+            console.log('这里是success函数woniam....6...' + data);
+            console.log(data + String)
+
+        },
+        error: function (data, xhr) {
+            console.log('这里是error函数我娘吗.....7...' + data);
+            console.log(xhr + '...8...没输入xhr的值')
+        }
+    })
+</script>
+</body>
+</html>
